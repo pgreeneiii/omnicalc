@@ -4,20 +4,29 @@ class CalculationsController < ApplicationController
     @text = params[:user_text]
     @special_word = params[:user_word]
 
-    # ================================================================================
-    # Your code goes below.
-    # The text the user input is in the string @text.
-    # The special word the user input is in the string @special_word.
-    # ================================================================================
+   sentence = @text.downcase.split
+   search_key = @special_word.downcase.split
 
+   sentence_length = 0
+   search_count = 0
 
-    @word_count = "Replace this string with your answer."
+   sentence.each do |word|
+      sentence_length += word.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+      search_key.each do |key|
+         if key == word.gsub(/[^a-z0-9\s]/i, "")
+            search_count += 1
+         end
+      end
+   end
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split.count
 
-    @occurrences = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
+
+    @character_count_without_spaces = sentence_length
+
+    @occurrences = search_count
 
     # ================================================================================
     # Your code goes above.
@@ -31,18 +40,12 @@ class CalculationsController < ApplicationController
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
-    # ================================================================================
-    # Your code goes below.
-    # The annual percentage rate the user input is in the decimal @apr.
-    # The number of years the user input is in the integer @years.
-    # The principal value the user input is in the decimal @principal.
-    # ================================================================================
+   monthly_interest = (@apr/12.0/100)
+   months = (@years*12)
 
-    @monthly_payment = "Replace this string with your answer."
+   payment = ((@principal*monthly_interest)/(1-(1+monthly_interest)**(-months)))
 
-    # ================================================================================
-    # Your code goes above.
-    # ================================================================================
+    @monthly_payment = payment
 
     render("loan_payment.html.erb")
   end
@@ -60,12 +63,19 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    seconds = @ending-@starting
+    minutes = (seconds/60.0)
+    hours = (minutes/60.0)
+    days = (hours/24.0)
+    weeks = (days/7.0)
+    years = (weeks/52.0)
+
+    @seconds = seconds
+    @minutes = minutes
+    @hours = hours
+    @days = days
+    @weeks = weeks
+    @years = years
 
     # ================================================================================
     # Your code goes above.
@@ -77,10 +87,7 @@ class CalculationsController < ApplicationController
   def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
-    # ================================================================================
-    # Your code goes below.
-    # The numbers the user input are in the array @numbers.
-    # ================================================================================
+   
 
     @sorted_numbers = "Replace this string with your answer."
 
